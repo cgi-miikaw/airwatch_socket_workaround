@@ -41,7 +41,7 @@ class MultipartBodyProvider implements HttpRequestBodyProvider {
     if (request is MultipartRequest) {
       List<MultipartMessage> messages = [];
 
-      await Future.forEach(request.files, (file) async {
+      await Future.forEach(request.files, (dynamic file) async {
         final bytes = await file.finalize().toBytes();
         final contentType = ContentType.parse(file.contentType.mimeType);
 
@@ -110,7 +110,7 @@ class RawBodyProvider implements HttpRequestBodyProvider {
 
 class MultipartMessage {
   /// The name of the form field.
-  final String name;
+  final String? name;
 
   /// The size of the file/field in bytes.
   final int length;
@@ -124,13 +124,13 @@ class MultipartMessage {
 
   /// Creates a new [MultipartFile] from an array of bytes, with a default
   /// content-type of `application/octet-stream`.
-  MultipartMessage(this.name, this.data, this.length, {ContentType contentType})
+  MultipartMessage(this.name, this.data, this.length, {ContentType? contentType})
       : contentType = contentType ?? ContentType.binary;
 
   /// Creates a new [MultipartFile] from a byte array, with a default
   /// content-type of `application/octet-stream`.
-  factory MultipartMessage.fromBytes(String field, Uint8List rawBytes,
-      {ContentType contentType}) {
+  factory MultipartMessage.fromBytes(String? field, Uint8List rawBytes,
+      {ContentType? contentType}) {
     return MultipartMessage(field, rawBytes, rawBytes.length,
         contentType: contentType ?? ContentType.binary);
   }
@@ -138,18 +138,18 @@ class MultipartMessage {
   /// Creates a new [MultipartFile] from a string, with a default content type
   /// of `text/plain` and UTF-8 encoding.
   factory MultipartMessage.fromString(String field, String value,
-      {ContentType contentType}) {
+      {ContentType? contentType}) {
     contentType ??= ContentType.text;
-    final encoder = Encoding.getByName(contentType.charset);
+    final encoder = Encoding.getByName(contentType.charset)!;
 
-    return MultipartMessage.fromBytes(field, encoder.encode(value),
+    return MultipartMessage.fromBytes(field, encoder.encode(value) as Uint8List,
         contentType: contentType);
   }
 
   /// Creates a new [MultipartFile] from a Json map, with a default content type
   /// of `application/json` and UTF-8 encoding.
   factory MultipartMessage.fromJson(String field, Map<String, dynamic> value,
-      {ContentType contentType}) {
+      {ContentType? contentType}) {
     final jsonEncoded = json.encode(value);
 
     return MultipartMessage.fromString(field, jsonEncoded,
@@ -165,7 +165,7 @@ class MultipartMessage {
 
   static MultipartMessage fromCodec<T>(
       String field, T value, Codec<T, List<int>> codec,
-      {ContentType contentType}) {
+      {ContentType? contentType}) {
     return MultipartMessage.fromBytes(
         field, Uint8List.fromList(codec.encode(value)),
         contentType: contentType);

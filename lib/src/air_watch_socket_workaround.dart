@@ -33,7 +33,7 @@ abstract class AirWatchHttpWorkAroundConfiguration {
 
 class AirWatchWorkAroundFactory {
   static AirWatchHttpWorkAround getInstance(
-      {AirWatchHttpWorkAroundConfiguration config}) {
+      {AirWatchHttpWorkAroundConfiguration? config}) {
     config = config ?? DefaultAirWatchHttpWorkAroundConfiguration();
     return AirWatchHttpRequestWorkAroundImpl(
         ContentTypeBasedHttpRequestBodyProviderFactory(), config);
@@ -41,7 +41,7 @@ class AirWatchWorkAroundFactory {
 
   static Future<AirWatchWebSocketWorkAroundSession<T>>
       getInstanceSocketSession<T>(String url,
-          {AirWatchHttpWorkAroundConfiguration config}) async {
+          {AirWatchHttpWorkAroundConfiguration? config}) async {
     config = config ?? DefaultAirWatchHttpWorkAroundConfiguration();
     return await NativeWebSocketSession.create<T>(url);
   }
@@ -63,7 +63,7 @@ class AirWatchWorkAroundFactory {
 /// A corresponding websocket session is maintained in the native side, since
 /// all the message exchanges are done there.
 abstract class AirWatchWebSocketWorkAroundSession<T> {
-  Stream<T> receiveBroadcastStream();
+  Stream<T>? receiveBroadcastStream();
 
   Future<void> send(String data);
 

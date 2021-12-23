@@ -40,7 +40,7 @@ class AirWatchHttpRequestWorkAroundImpl implements AirWatchHttpWorkAround {
     var bodyProvider = _bodyProviderFactory.build(contentType);
     var body = await bodyProvider.getBody(request);
 
-    Map data = await platform.invokeMethod('doRequest', {
+    Map? data = await platform.invokeMethod('doRequest', {
       "url": request.url.toString(),
       "headers": request.headers,
       "method": request.method,
@@ -54,16 +54,14 @@ class AirWatchHttpRequestWorkAroundImpl implements AirWatchHttpWorkAround {
     Map<String, String> headers = {};
     if (data.containsKey('headers')) {
       headers = (data['headers'] as Map<dynamic, dynamic>)
-          .map((key, value) => MapEntry(key?.toString(), value?.toString()));
+          .map((key, value) => MapEntry(key.toString(), value.toString()));
     }
 
     var statusCode = data["statusCode"] ?? 0;
 
     return http.Response.bytes(
-        data["data"] ?? utf8.encode(''),
-        statusCode > 100 ? statusCode : 500,
-        headers: headers,
-        request: request);
+        data["data"] ?? utf8.encode(''), statusCode > 100 ? statusCode : 500,
+        headers: headers, request: request);
   }
 }
 
