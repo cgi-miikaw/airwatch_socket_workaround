@@ -11,12 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.4
-  logging: ^0.11.4
+  logging: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  http_parser:
+  http_parser: ^4.0.0
 
 flutter:
   plugin:
