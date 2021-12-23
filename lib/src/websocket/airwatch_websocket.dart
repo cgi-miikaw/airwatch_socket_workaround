@@ -16,7 +16,7 @@ class NativeWebSocketSession<T>
   final MethodChannel _dispatcherMethodChannel;
   final String _eventChannelName;
   final PlatformToWebSocketSessionExceptionMapper _exceptionMapper;
-  Stream<T> _stream;
+  Stream<T>? _stream;
 
   /// Factory method
   /// builds a [NativeWebSocketSession] using [MethodChannel] to create
@@ -46,7 +46,7 @@ class NativeWebSocketSession<T>
         );
 
   @override
-  Stream<T> receiveBroadcastStream() {
+  Stream<T>? receiveBroadcastStream() {
     // TODO safe to do this?
     _stream ??= EventChannel(_eventChannelName)
         .receiveBroadcastStream()
@@ -97,9 +97,9 @@ class NativeWebSocketSession<T>
 
 class WebSocketSessionException implements Exception {
   final WebSocketSessionExceptionType type;
-  final String message;
-  final String details;
-  final String stacktrace;
+  final String? message;
+  final String? details;
+  final String? stacktrace;
 
   WebSocketSessionException(this.type,
       {this.message, this.details, this.stacktrace});
