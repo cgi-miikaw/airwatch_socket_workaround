@@ -57,6 +57,8 @@ class AirWatchHttpRequestWorkAroundImpl implements AirWatchHttpWorkAround {
           .map((key, value) => MapEntry(key.toString(), value.toString()));
     }
 
+    headers['content-type'] = 'application/json; charset=utf-8';
+
     var statusCode = data["statusCode"] ?? 0;
 
     if (data["data"] is String) {
