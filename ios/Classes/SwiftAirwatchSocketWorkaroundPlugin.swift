@@ -41,6 +41,14 @@ public class SwiftAirwatchSocketWorkaroundPlugin: NSObject, FlutterPlugin {
             self.onWebSocketCloseHandler = onWebSocketCloseHandler;
         }
 
+      func urlSession(_ session: URLSession, 
+                task: URLSessionTask, 
+                willPerformHTTPRedirection response: HTTPURLResponse, 
+                newRequest request: URLRequest, 
+                completionHandler: @escaping (URLRequest?) -> Void) {
+          completionHandler(nil)
+      }
+
       /*
        This method implemenents urlSession from URLSessionDelegate
        The goal is to bypass certification check
